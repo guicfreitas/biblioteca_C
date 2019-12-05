@@ -69,3 +69,76 @@ struct lista {
   Livro* inicio;
 
 };
+
+
+
+Espera* criarEspera(){
+  Espera* fila = (Espera*) malloc(sizeof(Espera));
+
+  fila->inicio = NULL;
+  fila->fim = NULL;
+
+  return fila;
+}
+
+void inserirEspera(Espera* fila, int matricula){
+  Matricula* novoMat = (Matricula*) malloc(sizeof(Matricula));
+  novoMat->matricula = matricula;
+
+  if(fila->inicio == NULL){
+
+    fila->inicio = novoMat;
+    fila->fim = novoMat;
+    novoMat->prox = NULL;
+
+  }else{
+
+    fila->fim->prox = novoMat;
+    novoMat->prox = NULL;
+    fila->fim = novoMat;
+
+
+  }
+
+}
+int retirarEspera(Espera* fila){
+
+  Matricula* matTemp;
+
+  if(esperaVazia(fila)!=1){
+
+    matTemp = fila->inicio;
+    int matRetirada = matTemp->matricula;
+    fila->inicio = fila->inicio->prox;
+    free(matTemp);
+
+    return matRetirada;
+
+  }else{
+
+    return -1;
+
+  }
+}
+int esperaVazia(Espera* fila){
+
+  if(fila->inicio==NULL){
+    rerturn 1;
+  }else{
+    return  0;
+  }
+
+}
+void liberarEspera(Espera* fila){
+  Matricula* atual = fila->inicio;
+  Matricula* atualTemp;
+  while(atual->prox != NULL){
+
+    atualTemp=atual;
+    atual = atual->prox;
+    free(atualTemp);
+
+  }
+
+  free(fila);
+}
