@@ -259,7 +259,26 @@ void liberarListaLivro(ListaLivro* livros){
 
   free(livros);
 }
-
+ 
 int main(){
+  int qtdLivros,cont,ano,qtdExemplares;
+  char autor[100];
+  char titulo[100];
+  
+  //leitura da quantidade de livros
+  scanf("%d",&qtdLivros);
+  ListaLivro* livros = criarListaLivro(qtdLivros);
+  
+  for(cont=0;cont<qtdLivros;cont++){
+    
+    scanf("%d",&ano);
+    scanf(" %s",autor);
+    scanf("%s", titulo);
+    scanf(" %d",&qtdExemplares);
+
+    inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
+
+  }
+
   return 0;
 }
