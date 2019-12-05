@@ -28,7 +28,7 @@ void liberarExemplares(Exemplares* pilha);
 
 
 //metodos para lista de livros
-ListaLivro* criarListaLivro();
+ListaLivro* criarListaLivro(int tamanho);
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares);
 Livro* buscaLivro(ListaLivro* livros, char* titulo);
 void liberarListaLivro(ListaLivro* livros);
@@ -195,3 +195,40 @@ void liberarExemplares(Exemplares* pilha){
   free(pilha->vetExemplares);
   free(pilha);
 }
+/*
+int anoPublicaco;
+char autor[100];
+char titulo[100];
+int qtdExemplares;
+Livro* prox;
+Exemplares* pilhaExemplares;
+Espera* filaEspera;
+*/
+ListaLivro* criarListaLivro(int tamanho){
+  ListaLivro*  lista = (ListaLivro*) malooc(sizeof(ListaLivro));
+
+  lista->tamanho = tamanho;
+  lista->inicio = NULL;
+
+  return lista;
+}
+void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares){
+  Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
+  novoLivro->anoPublicaco = anoPublicaco;
+  strcpy(novoLivro->autor,autor);
+  strcpy(novoLivro->titulo,titulo);
+  novoLivro->qtdExemplares = qtdExemplares;
+  novoLivro->pilhaExemplares = criarExemplares(qtdExemplares);
+  novoLivro->filaEspera = criarEspera();
+
+  
+
+  if(livros->inicio==NULL){
+    livros->inicio = novoLivro;
+    novoLivro->prox=NULL;
+  }else{
+
+  }
+}
+Livro* buscaLivro(ListaLivro* livros, char* titulo);
+void liberarListaLivro(ListaLivro* livros);
