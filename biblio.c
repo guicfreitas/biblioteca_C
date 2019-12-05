@@ -18,11 +18,13 @@ void liberarEspera(Espera* fila);
 
 
 //metodos para pilha de exemplares
-Exemplares* criarExemplares();
+Exemplares* criarExemplares(int qtdExemplares);
 void pushExemplar(Exemplares* pilha, int exemplares);
 int popExemplar(Exemplares* pilha);
 int exemplarVazia(Exemplares* pilha);
 void liberarExemplares(Exemplares* pilha);
+
+
 
 
 //metodos para lista de livros
@@ -31,6 +33,7 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
 Livro* buscaLivro(ListaLivro* livros, char* titulo);
 void liberarListaLivro(ListaLivro* livros);
 
+///////////////////////////////////////////////// IMPLEMENTACAO ///////////////////////////////////////////////
 
 
 struct matricula{
@@ -123,7 +126,7 @@ int retirarEspera(Espera* fila){
 int esperaVazia(Espera* fila){
 
   if(fila->inicio==NULL){
-    rerturn 1;
+    return 1;
   }else{
     return  0;
   }
@@ -141,4 +144,54 @@ void liberarEspera(Espera* fila){
   }
 
   free(fila);
+}
+
+
+int main(){
+  return 0;
+}
+
+
+Exemplares* criarExemplares(int qtdExemplares){
+  Exemplares* pilha = (Exemplares*) malloc(sizeof(Exemplares));
+
+
+  pilha->numExemplares = 0;
+  pilha->dim = qtdExemplares;
+  pilha->vetExemplares = (int*) calloc(qtdExemplares,sizeof(int*));
+
+  return pilha;
+
+}
+void pushExemplar(Exemplares* pilha, int exemplares){
+
+  pilha->vetExemplares[pilha->numExemplares] = exemplares;
+  pilha->numExemplares = pilha->numExemplares + 1;
+
+}
+
+int popExemplar(Exemplares* pilha){
+  int desempilha;
+  if(exemplarVazia(pilha)!=1){
+
+    desempilha = pilha->vetExemplares[pilha->numExemplares-1];
+    pilha->numExemplares = pilha->numExemplares - 1;
+    return desempilha;
+
+  }else{
+
+    return -1;
+
+  }
+}
+int exemplarVazia(Exemplares* pilha){
+  if(pilha->numExemplares == 0){
+    return 1;
+  }else{
+    return 0;
+  }
+}
+void liberarExemplares(Exemplares* pilha){
+  free(pilha->vetExemplares);
+  free(pilha);
 }
