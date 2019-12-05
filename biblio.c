@@ -190,17 +190,9 @@ void liberarExemplares(Exemplares* pilha){
   free(pilha->vetExemplares);
   free(pilha);
 }
-/*
-int anoPublicaco;
-char autor[100];
-char titulo[100];
-int qtdExemplares;
-Livro* prox;
-Exemplares* pilhaExemplares;
-Espera* filaEspera;
-*/
+
 ListaLivro* criarListaLivro(int tamanho){
-  ListaLivro*  lista = (ListaLivro*) malooc(sizeof(ListaLivro));
+  ListaLivro*  lista = (ListaLivro*) malloc(sizeof(ListaLivro));
 
   lista->tamanho = tamanho;
   lista->inicio = NULL;
@@ -245,7 +237,7 @@ Livro* buscaLivro(ListaLivro* livros, char* titulo){
   Livro* atual = livros->inicio;
 
   while(atual->prox != NULL){
-    if(strncmp(titulo,atual->titulo)==0){
+    if(strcmp(titulo,atual->titulo)==0){
       return atual;
     }
       atual= atual->prox;
