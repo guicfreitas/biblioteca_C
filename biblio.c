@@ -33,6 +33,7 @@ ListaLivro* criarListaLivro(int tamanho);
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares);
 Livro* buscaLivro(ListaLivro* livros, char* titulo);
 void liberarListaLivro(ListaLivro* livros);
+void imprimirListaLivro(ListaLivro* livros);
 
 ///////////////////////////////////////////////// IMPLEMENTACAO ///////////////////////////////////////////////
 
@@ -153,7 +154,7 @@ Exemplares* criarExemplares(int qtdExemplares){
 
   pilha->numExemplares = 0;
   pilha->dim = qtdExemplares;
-  pilha->vetExemplares = (int*) calloc(qtdExemplares,sizeof(int*));
+  pilha->vetExemplares = (int*) calloc(qtdExemplares,sizeof(int));
 
   return pilha;
 
@@ -259,6 +260,15 @@ void liberarListaLivro(ListaLivro* livros){
 
   free(livros);
 }
+
+void imprimirListaLivro(ListaLivro* livros){
+  Livro* atual ;
+
+  for(atual=livros->inicio;atual!=NULL;atual=atual->prox){
+    printf("%d\n%s\n%s\n%d\n",atual->anoPublicaco,atual->autor,atual->titulo,atual->qtdExemplares);
+  }
+
+}
  
 int main(){
   int qtdLivros,cont,ano,qtdExemplares;
@@ -271,14 +281,14 @@ int main(){
   
   for(cont=0;cont<qtdLivros;cont++){
     
-    scanf("%d",&ano);
+    scanf(" %d",&ano);
     scanf(" %s",autor);
-    scanf("%s", titulo);
+    scanf(" %s", titulo);
     scanf(" %d",&qtdExemplares);
 
     inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
 
   }
-
+  imprimirListaLivro(livros);
   return 0;
 }
