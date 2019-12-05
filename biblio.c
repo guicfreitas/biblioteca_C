@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 typedef struct matricula Matricula;
@@ -146,12 +147,6 @@ void liberarEspera(Espera* fila){
   free(fila);
 }
 
-
-int main(){
-  return 0;
-}
-
-
 Exemplares* criarExemplares(int qtdExemplares){
   Exemplares* pilha = (Exemplares*) malloc(sizeof(Exemplares));
 
@@ -213,6 +208,7 @@ ListaLivro* criarListaLivro(int tamanho){
   return lista;
 }
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares){
+  
   Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
   novoLivro->anoPublicaco = anoPublicaco;
   strcpy(novoLivro->autor,autor);
@@ -221,14 +217,57 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
   novoLivro->pilhaExemplares = criarExemplares(qtdExemplares);
   novoLivro->filaEspera = criarEspera();
 
-  
+  Livro* atual = livros->inicio;
+  Livro* anterior = NULL;
 
-  if(livros->inicio==NULL){
+  while (atual != NULL && atual->anoPublicaco < anoPublicaco){
+
+    anterior = atual;
+    atual = atual->prox;
+
+  }
+
+  if(anterior==NULL){
+    
+    novoLivro->prox=livros->inicio;
     livros->inicio = novoLivro;
-    novoLivro->prox=NULL;
+
   }else{
+
+    novoLivro->prox = anterior->prox;
+    anterior->prox = novoLivro;
 
   }
 }
-Livro* buscaLivro(ListaLivro* livros, char* titulo);
-void liberarListaLivro(ListaLivro* livros);
+
+Livro* buscaLivro(ListaLivro* livros, char* titulo){
+
+  Livro* atual = livros->inicio;
+
+  while(atual->prox != NULL){
+    if(strncmp(titulo,atual->titulo)==0){
+      return atual;
+    }
+      atual= atual->prox;
+  }
+  return NULL;
+
+}
+void liberarListaLivro(ListaLivro* livros){
+  Livro* atual = livros->inicio;
+  Livro* atualTemp;
+
+  while(atual->prox != NULL){
+
+    atualTemp=atual;
+    atual = atual->prox;
+    free(atualTemp);
+
+  }
+
+  free(livros);
+}
+
+int main(){
+  return 0;
+}
