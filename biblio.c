@@ -35,6 +35,10 @@ Livro* buscaLivro(ListaLivro* livros, char* titulo);
 void liberarListaLivro(ListaLivro* livros);
 void imprimirListaLivro(ListaLivro* livros);
 
+
+//metodos para emprestar e devolver livros
+void emprestarLivro(ListaLivro* livros, int  matricula, char* titulo);
+void devolverLivro(ListaLivro* livros, char* titulo);
 ///////////////////////////////////////////////// IMPLEMENTACAO ///////////////////////////////////////////////
 
 
@@ -286,6 +290,28 @@ void imprimirListaLivro(ListaLivro* livros){
     printf("%d\n",atual->qtdExemplares);
   }
 
+}
+
+void emprestarLivro(ListaLivro* livros, int  matricula, char* titulo){
+  result = buscaLivro(livros,titulos);
+
+    if(result != NULL){
+        if(exemplarVazia(result->pilhaExemplares)==1){
+          inserirEspera(result->filaEspera,matricula);
+        }else{
+          if(esperaVazia(result->filaEspera)==1){
+            popExemplar(result->pilhaExemplares);
+          }else{
+            retirarEspera(result->filaEspera);
+            inserirEspera(result->filaEspera,matricula);
+          }
+        }
+    }
+
+}
+void devolverLivro(ListaLivro* livros, char* titulo){
+    result = buscaLivro(livros,titulos);  
+    pushExemplar(result->filaEspera,((result->filaEspera->vetExemplares[result->filaEspera->numExemplares-1])+1));
 }
 
 int main(){
