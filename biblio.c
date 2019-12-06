@@ -294,7 +294,6 @@ void imprimirListaLivro(ListaLivro* livros){
     printf("%d\n",atual->anoPublicaco);
     printf("%s\n",atual->autor);
     printf("%s\n",atual->titulo);
-    printf("%d\n",atual->qtdExemplares);
     imprimirExemplares(atual->pilhaExemplares);
     imprimirEspera(atual->filaEspera);
   }
