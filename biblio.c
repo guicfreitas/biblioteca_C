@@ -208,7 +208,7 @@ ListaLivro* criarListaLivro(int tamanho){
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares){
   int cont;
   Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
-  Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
+  
   char* autorTemp = (char*) malloc(100*sizeof(char));
   char* tituloTemp = (char*) malloc(150*sizeof(char));
 
@@ -216,18 +216,14 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
   strcpy(tituloTemp,titulo);
 
 
-
-  for(cont=1;cont<=qtdExemplares;cont++){
-    pushExemplar(pilhaExemp,cont);
-  }
-
+  
   novoLivro->anoPublicaco = anoPublicaco;
   novoLivro->autor = autorTemp;
   novoLivro->titulo = tituloTemp;
   //strcpy(novoLivro->autor,autor);
   //strcpy(novoLivro->titulo,titulo);
   novoLivro->qtdExemplares = qtdExemplares;
-  novoLivro->pilhaExemplares = pilhaExemp;
+  
   novoLivro->filaEspera = criarEspera();
 
   Livro* atual = livros->inicio;
@@ -251,11 +247,21 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
     anterior->prox = novoLivro;
 
   }
+  Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
+  for(cont=1;cont<=qtdExemplares;cont++){
+    pushExemplar(pilhaExemp,cont);
+  }
+  novoLivro->pilhaExemplares = pilhaExemp;
 }
 
 Livro* buscaLivro(ListaLivro* livros, char* titulo){
 
   Livro* atual = livros->inicio;
+  if(atual->prox==NULL){
+    if(strcmp(titulo,atual->titulo)==0){
+      return atual;
+    }
+  }
 
   while(atual->prox != NULL){
     if(strcmp(titulo,atual->titulo)==0){
@@ -334,7 +340,7 @@ void imprimirEspera(Espera* fila){
 }
 void imprimirExemplares(Exemplares* pilha){
   if(exemplarVazia(pilha)==1){
-    printf("pilha vazia");
+    printf("pilha vazia\n");
   }else{
     printf("%d\n",pilha->vetExemplares[pilha->numExemplares-1]);
   }
@@ -363,7 +369,7 @@ int main(){
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
-    scanf("%c",&casoLivro);
+    scanf(" %c",&casoLivro);
 
     switch (casoLivro) {
       case 'E':
