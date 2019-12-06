@@ -207,10 +207,10 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
   char* autorTemp = (char*) malloc(100*sizeof(char));
   char* tituloTemp = (char*) malloc(150*sizeof(char));
 
-  autorTemp = autor;
-  tituloTemp = titulo;
+  strcpy(autorTemp,autor);
+  strcpy(tituloTemp,titulo);
 
- 
+
 
   for(cont=1;cont<=qtdExemplares;cont++){
     pushExemplar(pilhaExemp,cont);
