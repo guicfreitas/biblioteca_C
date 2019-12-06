@@ -15,7 +15,7 @@ void inserirEspera(Espera* fila, int matricula);
 int retirarEspera(Espera* fila);
 int esperaVazia(Espera* fila);
 void liberarEspera(Espera* fila);
-
+void imprimirEspera(Espera* fila);
 
 
 //metodos para pilha de exemplares
@@ -24,6 +24,7 @@ void pushExemplar(Exemplares* pilha, int exemplares);
 int popExemplar(Exemplares* pilha);
 int exemplarVazia(Exemplares* pilha);
 void liberarExemplares(Exemplares* pilha);
+void imprimirExemplares(Exemplares* pilha);
 
 
 
@@ -288,6 +289,8 @@ void imprimirListaLivro(ListaLivro* livros){
     printf("%s\n",atual->autor);
     printf("%s\n",atual->titulo);
     printf("%d\n",atual->qtdExemplares);
+    imprimirExemplares(atual->pilhaExemplares);
+    imprimirEspera(atual->filaEspera);
   }
 
 }
@@ -310,10 +313,29 @@ void emprestarLivro(ListaLivro* livros, int  matricula, char* titulo){
 
 }
 void devolverLivro(ListaLivro* livros, char* titulo){
-    result = buscaLivro(livros,titulos);  
+    result = buscaLivro(livros,titulos);
     pushExemplar(result->filaEspera,((result->filaEspera->vetExemplares[result->filaEspera->numExemplares-1])+1));
 }
 
+void imprimirEspera(Espera* fila){
+  if(esperaVazia(fila)==1){
+    printf("fila vazia\n");
+  }else{
+    Espera* atual=fila->inicio;
+    prinf("%d",atual->matricula);
+
+    for(atual;atual!=NULL;atual=atual->prox){
+        prinf(",%d",atual->matricula);
+    }
+    printf("\n");
+}
+void imprimirExemplares(Exemplares* pilha){
+  if(exemplarVazia(pilha)==1){
+    printf("pilha vazia");
+  }else{
+    printf("%d\n",pilha->vetExemplares[pilha->numExemplares-1]);
+  }
+}
 int main(){
   int qtdLivros,cont,ano,qtdExemplares;
   char* autor = (char*) malloc(100*sizeof(char));
