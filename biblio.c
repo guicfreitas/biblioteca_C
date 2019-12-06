@@ -296,7 +296,7 @@ void imprimirListaLivro(ListaLivro* livros){
 }
 
 void emprestarLivro(ListaLivro* livros, int  matricula, char* titulo){
-  result = buscaLivro(livros,titulos);
+  Livro* result = buscaLivro(livros,titulo);
 
     if(result != NULL){
         if(exemplarVazia(result->pilhaExemplares)==1){
@@ -313,21 +313,24 @@ void emprestarLivro(ListaLivro* livros, int  matricula, char* titulo){
 
 }
 void devolverLivro(ListaLivro* livros, char* titulo){
-    result = buscaLivro(livros,titulos);
-    pushExemplar(result->filaEspera,((result->filaEspera->vetExemplares[result->filaEspera->numExemplares-1])+1));
+    Livro* result = buscaLivro(livros,titulo);
+    if(result!=NULL){
+      pushExemplar(result->pilhaExemplares,((result->pilhaExemplares->vetExemplares[result->pilhaExemplares->numExemplares-1])+1));
+    }
 }
 
 void imprimirEspera(Espera* fila){
   if(esperaVazia(fila)==1){
     printf("fila vazia\n");
   }else{
-    Espera* atual=fila->inicio;
-    prinf("%d",atual->matricula);
+    Matricula* atual=fila->inicio;
+    printf("%d",atual->matricula);
 
     for(atual;atual!=NULL;atual=atual->prox){
-        prinf(",%d",atual->matricula);
+        printf(",%d",atual->matricula);
     }
     printf("\n");
+  }
 }
 void imprimirExemplares(Exemplares* pilha){
   if(exemplarVazia(pilha)==1){
@@ -337,9 +340,11 @@ void imprimirExemplares(Exemplares* pilha){
   }
 }
 int main(){
-  int qtdLivros,cont,ano,qtdExemplares;
+  int qtdLivros,cont,ano,qtdExemplares,matricula;
+  char casoLivro;
   char* autor = (char*) malloc(100*sizeof(char));
   char* titulo = (char*) malloc(150*sizeof(char));
+  char* tituloConsulta = (char*) malloc(150*sizeof(char));
 
   //leitura da quantidade de livros
   scanf("%d",&qtdLivros);
@@ -355,6 +360,21 @@ int main(){
     inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
 
   }
+
+  while(scanf("%d",&matricula)!=EOF){
+    scanf("%s",tituloConsulta);
+    scanf("%c",&casoLivro);
+
+    switch (casoLivro) {
+      case 'E':
+        emprestarLivro(livros,matricula,tituloConsulta);
+        break;
+      case 'D':
+        devolverLivro(livros,tituloConsulta);
+        break;
+    }
+  }
+
   imprimirListaLivro(livros);
   return 0;
 }
