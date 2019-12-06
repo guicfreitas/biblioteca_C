@@ -206,22 +206,15 @@ ListaLivro* criarListaLivro(int tamanho){
   return lista;
 }
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares){
-  int cont;
+  int cont,contLista=0;
   Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
   
   char* autorTemp = (char*) malloc(100*sizeof(char));
   char* tituloTemp = (char*) malloc(150*sizeof(char));
 
-  strcpy(autorTemp,autor);
-  strcpy(tituloTemp,titulo);
-
 
   
   novoLivro->anoPublicaco = anoPublicaco;
-  novoLivro->autor = autorTemp;
-  novoLivro->titulo = tituloTemp;
-  //strcpy(novoLivro->autor,autor);
-  //strcpy(novoLivro->titulo,titulo);
   novoLivro->qtdExemplares = qtdExemplares;
   
   novoLivro->filaEspera = criarEspera();
@@ -229,13 +222,20 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
   Livro* atual = livros->inicio;
   Livro* anterior = NULL;
 
-  while (atual != NULL && atual->anoPublicaco < anoPublicaco){
+  if(atual!=NULL){
 
-    anterior = atual;
-    atual = atual->prox;
+    while (contLista < livros->tamanho && atual->anoPublicaco < anoPublicaco){
 
+      if(atual!=NULL){
+        anterior = atual;
+        atual = atual->prox;
+        
+      }
+      
+      contLista++;
+
+    }
   }
-
   if(anterior==NULL){
 
     novoLivro->prox=livros->inicio;
@@ -247,7 +247,16 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
     anterior->prox = novoLivro;
 
   }
+  
+
+  strcpy(autorTemp,autor);
+  strcpy(tituloTemp,titulo);
+
+  novoLivro->autor = autorTemp;
+  novoLivro->titulo = tituloTemp;
+
   Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
+
   for(cont=1;cont<=qtdExemplares;cont++){
     pushExemplar(pilhaExemp,cont);
   }
@@ -288,14 +297,16 @@ void liberarListaLivro(ListaLivro* livros){
 }
 
 void imprimirListaLivro(ListaLivro* livros){
-  Livro* atual;
+  Livro* atual=livros->inicio;
+  int cont;
 
-  for(atual=livros->inicio;atual!=NULL;atual=atual->prox){
+  for(cont=0;cont<livros->tamanho;cont++){
     printf("%d\n",atual->anoPublicaco);
     printf("%s\n",atual->autor);
     printf("%s\n",atual->titulo);
     imprimirExemplares(atual->pilhaExemplares);
     imprimirEspera(atual->filaEspera);
+    atual=atual->prox;
   }
 
 }
