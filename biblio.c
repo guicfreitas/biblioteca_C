@@ -216,6 +216,7 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
   
   novoLivro->anoPublicaco = anoPublicaco;
   novoLivro->qtdExemplares = qtdExemplares;
+ 
   
   novoLivro->filaEspera = criarEspera();
 
@@ -228,15 +229,19 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
 
       if(atual!=NULL){
         anterior = atual;
-        atual = atual->prox;
-        
+        if(atual->prox!=NULL){
+          atual = atual->prox;
+        }
       }
       
       contLista++;
 
     }
   }
-  if(anterior==NULL){
+  if(livros->inicio==NULL){
+    novoLivro->prox = NULL;
+    livros->inicio = novoLivro;
+  }else if(anterior==NULL){
 
     novoLivro->prox=livros->inicio;
     livros->inicio = novoLivro;
