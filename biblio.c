@@ -200,7 +200,7 @@ void liberarExemplares(Exemplares* pilha){
 ListaLivro* criarListaLivro(int tamanho){
   ListaLivro*  lista = (ListaLivro*) malloc(sizeof(ListaLivro));
 
-  lista->tamanho = tamanho;
+  lista->tamanho = 0;
   lista->inicio = NULL;
 
   return lista;
@@ -266,6 +266,7 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
     pushExemplar(pilhaExemp,cont);
   }
   novoLivro->pilhaExemplares = pilhaExemp;
+  livros->tamanho=livros->tamanho+1;
 }
 
 Livro* buscaLivro(ListaLivro* livros, char* titulo){
