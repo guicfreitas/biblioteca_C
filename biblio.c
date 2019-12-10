@@ -214,22 +214,6 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
 
   novoLivro->anoPublicaco = anoPublicaco;
   novoLivro->qtdExemplares = qtdExemplares;
-  novoLivro->filaEspera = criarEspera();
-
-
-
-  strcpy(autorTemp,autor);
-  strcpy(tituloTemp,titulo);
-
-  novoLivro->autor = autorTemp;
-  novoLivro->titulo = tituloTemp;
-
-  Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
-
-  for(cont=1;cont<=qtdExemplares;cont++){
-    pushExemplar(pilhaExemp,cont);
-  }
-  novoLivro->pilhaExemplares = pilhaExemp;
 
   Livro* atual = livros->inicio;
   Livro* anterior = NULL;
@@ -257,18 +241,24 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
     }
   }
 
+  strcpy(autorTemp,autor);
+  strcpy(tituloTemp,titulo);
 
-
-
-
-
+  novoLivro->autor = autorTemp;
+  novoLivro->titulo = tituloTemp;
+  novoLivro->filaEspera = criarEspera();
+  Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
+  for(cont=1;cont<=qtdExemplares;cont++){
+    pushExemplar(pilhaExemp,cont);
+  }
+  novoLivro->pilhaExemplares = pilhaExemp;
   livros->tamanho=livros->tamanho+1;
 
 
 }
 
 Livro* buscaLivro(ListaLivro* livros, char* titulo){
-
+  int cont;
   Livro* atual = livros->inicio;
   if(atual->prox==NULL){
     if(strcmp(titulo,atual->titulo)==0){
@@ -276,7 +266,7 @@ Livro* buscaLivro(ListaLivro* livros, char* titulo){
     }
   }
 
-  while(atual->prox != NULL){
+  while(cont < livros->tamanho){
     if(strcmp(titulo,atual->titulo)==0){
       return atual;
     }
@@ -380,6 +370,7 @@ int main(){
     inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
 
   }
+  imprimirListaLivro(livros);
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
