@@ -31,14 +31,14 @@ void imprimirExemplares(Exemplares* pilha);
 
 //metodos para lista de livros
 ListaLivro* criarListaLivro(int tamanho);
-void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares);
-Livro* buscaLivro(ListaLivro* livros, char* titulo);
+void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], char titulo[], int qtdExemplares);
+Livro* buscaLivro(ListaLivro* livros, char titulo[]);
 void liberarListaLivro(ListaLivro* livros);
 void imprimirListaLivro(ListaLivro* livros);
 
 
 //metodos para emprestar e devolver livros
-void emprestarLivro(ListaLivro* livros, int  matricula, char* titulo);
+void emprestarLivro(ListaLivro* livros, int  matricula, char titulo[]);
 void devolverLivro(ListaLivro* livros, char* titulo);
 ///////////////////////////////////////////////// IMPLEMENTACAO ///////////////////////////////////////////////
 
@@ -64,8 +64,8 @@ struct exemplares{
 
 struct livro{
   int anoPublicaco;
-  char* autor;
-  char* titulo;
+  char autor[100];
+  char titulo[150];
   int qtdExemplares;
   Livro* prox;
   Exemplares* pilhaExemplares;
@@ -77,6 +77,7 @@ struct livro{
 struct lista {
   int tamanho;
   Livro* inicio;
+  Livro* fim;
 
 };
 
@@ -202,15 +203,16 @@ ListaLivro* criarListaLivro(int tamanho){
 
   lista->tamanho = 0;
   lista->inicio = NULL;
+  lista->fim = NULL;
 
   return lista;
 }
-void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares){
+void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], char titulo[], int qtdExemplares){
   int cont,contLista=0;
-  Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
+  Livro* novoLivro = (Livro*) malloc(sizeof(Livro));
 
-  char* autorTemp = (char*) malloc(100*sizeof(char));
-  char* tituloTemp = (char*) malloc(150*sizeof(char));
+  //char* autorTemp = (char*) malloc(100*sizeof(char));
+  //char* tituloTemp = (char*) malloc(150*sizeof(char));
 
   novoLivro->anoPublicaco = anoPublicaco;
   novoLivro->qtdExemplares = qtdExemplares;
@@ -241,11 +243,8 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
     }
   }
 
-  strcpy(autorTemp,autor);
-  strcpy(tituloTemp,titulo);
-
-  novoLivro->autor = autorTemp;
-  novoLivro->titulo = tituloTemp;
+  strcpy(novoLivro->autor,autor);
+  strcpy(novoLivro->titulo,titulo);
   novoLivro->filaEspera = criarEspera();
   Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
   for(cont=1;cont<=qtdExemplares;cont++){
@@ -256,9 +255,33 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
 
 
 }
-
-Livro* buscaLivro(ListaLivro* livros, char* titulo){
+void inserirLivro(ListaLivro* livros, int anoPublicaco, char* autorP, char* tituloP, int qtdExemplares){
   int cont;
+  Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
+  novoLivro->anoPublicaco = anoPublicaco;
+  novoLivro->qtdExemplares = qtdExemplares;
+  strcpy(novoLivro->autor,autorP);
+  strcpy(novoLivro->titulo,tituloP);
+  Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
+  for(cont=1;cont<=qtdExemplares;cont++){
+    pushExemplar(pilhaExemp,cont);
+  }
+  novoLivro->pilhaExemplares = pilhaExemp;
+  if(livros->inicio == NULL){
+    novoLivro->prox = NULL;
+    livros->inicio=novoLivro;
+    livros->fim=novoLivro;
+  }else{
+    livros->fim->prox=novoLivro;
+    livros->fim = novoLivro;
+    novoLivro->prox = NULL;
+  }
+  livros->tamanho=livros->tamanho+1;
+
+
+}
+Livro* buscaLivro(ListaLivro* livros, char titulo[]){
+  int cont=0;
   Livro* atual = livros->inicio;
   if(atual->prox==NULL){
     if(strcmp(titulo,atual->titulo)==0){
@@ -271,6 +294,7 @@ Livro* buscaLivro(ListaLivro* livros, char* titulo){
       return atual;
     }
       atual= atual->prox;
+      cont++;
   }
   return NULL;
 
@@ -352,9 +376,14 @@ void imprimirExemplares(Exemplares* pilha){
 int main(){
   int qtdLivros,cont,ano,qtdExemplares,matricula;
   char casoLivro;
-  char* autor = (char*) malloc(100*sizeof(char));
-  char* titulo = (char*) malloc(150*sizeof(char));
-  char* tituloConsulta = (char*) malloc(150*sizeof(char));
+  //char* autor = (char*) malloc(100*sizeof(char));
+  //char* titulo = (char*) malloc(150*sizeof(char));
+
+  char autor[100];
+  char titulo[150];
+  char tituloConsulta[150];
+
+  //char* tituloConsulta = (char*) malloc(150*sizeof(char));
 
   //leitura da quantidade de livros
   scanf("%d",&qtdLivros);
@@ -370,7 +399,7 @@ int main(){
     inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
 
   }
-  imprimirListaLivro(livros);
+  //imprimirListaLivro(livros);
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
