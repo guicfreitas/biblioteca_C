@@ -208,51 +208,15 @@ ListaLivro* criarListaLivro(int tamanho){
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, char* titulo, int qtdExemplares){
   int cont,contLista=0;
   Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
-  
+
   char* autorTemp = (char*) malloc(100*sizeof(char));
   char* tituloTemp = (char*) malloc(150*sizeof(char));
 
-
-  
   novoLivro->anoPublicaco = anoPublicaco;
   novoLivro->qtdExemplares = qtdExemplares;
- 
-  
   novoLivro->filaEspera = criarEspera();
 
-  Livro* atual = livros->inicio;
-  Livro* anterior = NULL;
 
-  if(atual!=NULL){
-
-    while (contLista < livros->tamanho && atual->anoPublicaco < anoPublicaco){
-
-      if(atual!=NULL){
-        anterior = atual;
-        if(atual->prox!=NULL){
-          atual = atual->prox;
-        }
-      }
-      
-      contLista++;
-
-    }
-  }
-  if(livros->inicio==NULL){
-    novoLivro->prox = NULL;
-    livros->inicio = novoLivro;
-  }else if(anterior==NULL){
-
-    novoLivro->prox=livros->inicio;
-    livros->inicio = novoLivro;
-
-  }else{
-
-    novoLivro->prox = anterior->prox;
-    anterior->prox = novoLivro;
-
-  }
-  
 
   strcpy(autorTemp,autor);
   strcpy(tituloTemp,titulo);
@@ -266,7 +230,41 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char* autor, ch
     pushExemplar(pilhaExemp,cont);
   }
   novoLivro->pilhaExemplares = pilhaExemp;
+
+  Livro* atual = livros->inicio;
+  Livro* anterior = NULL;
+
+  if(livros->inicio==NULL){
+    livros->inicio = novoLivro;
+    novoLivro->prox = NULL;
+  }else{
+    if(livros->tamanho == 1){
+      if(anoPublicaco > livros->inicio-> anoPublicaco){
+        livros->inicio->prox = novoLivro;
+        novoLivro->prox = NULL;
+      }else{
+        novoLivro->prox = livros->inicio;
+      }
+    }else{
+      while(contLista < livros->tamanho && atual->anoPublicaco < anoPublicaco){
+        anterior = atual;
+        atual = atual->prox;
+        contLista++;
+      }
+
+      anterior->prox = novoLivro;
+      novoLivro->prox = atual;
+    }
+  }
+
+
+
+
+
+
   livros->tamanho=livros->tamanho+1;
+
+
 }
 
 Livro* buscaLivro(ListaLivro* livros, char* titulo){
