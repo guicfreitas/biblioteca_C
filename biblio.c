@@ -359,7 +359,7 @@ void imprimirEspera(Espera* fila){
   }else{
     Matricula* atual=fila->inicio;
     printf("%d",atual->matricula);
-
+    atual=atual->prox;
     for(atual;atual!=NULL;atual=atual->prox){
         printf(",%d",atual->matricula);
     }
