@@ -3,8 +3,6 @@
 #include <string.h>
 
 
-
-
 typedef struct matricula Matricula;
 typedef struct espera Espera;
 typedef struct exemplares Exemplares;
@@ -12,31 +10,74 @@ typedef struct livro Livro;
 typedef struct lista ListaLivro;
 
 //metodos para fila de espera
+// metodo para alocar dinamicamente memoria para struct de fila de espera, retorna um ponteiro do tipo Espera
 Espera* criarEspera();
+
+// metodo para inserir uma matricula dos alunos na fila
 void inserirEspera(Espera* fila, int matricula);
+
+//metodo para retirar uma matricula que foi inserida na fila tem como retorno a propria matricula
 int retirarEspera(Espera* fila);
+
+//metodo de verificacao se a fila esta vazia retorna 1 se estiver vazia e 0 se estiver populada
 int esperaVazia(Espera* fila);
+
+//metodo para liberar a memoria alocada pela fila
 void liberarEspera(Espera* fila);
+
+//metodo para imprimir o estado atual da fila de espera
 void imprimirEspera(Espera* fila);
 
 
 //metodos para pilha de exemplares
+// metodo para alocar dinamicamente memoria para struct de pilha de exemplares, retorna um ponteiro do tipo Exemplares
 Exemplares* criarExemplares(int qtdExemplares);
+
+// metodo para empilhar um livro
 void pushExemplar(Exemplares* pilha, int exemplares);
+
+// metodo para desimpilhar um livro tem como retorno o numero desempilhado que corresponde a qtd de livros na pilha
 int popExemplar(Exemplares* pilha);
+
+//metodo de verificacao se a pilha esta vazia retorna 1 se estiver vazia e 0 se estiver populada
 int exemplarVazia(Exemplares* pilha);
+
+//metodo para liberar a memoria alocada pela pilha
 void liberarExemplares(Exemplares* pilha);
+
+//metodo para imprimir o estado atual da pilha de exemplares
 void imprimirExemplares(Exemplares* pilha);
 
 
 
 
 //metodos para lista de livros
+// metodo para alocar dinamicamente memoria para struct de uma struct de lista, retorna um ponteiro do tipo Livros
 ListaLivro* criarListaLivro(int tamanho);
+
+//metodo para a insersao ordenada de um livro, dentro de cada livro eh chamada a funcao de criacao de 
+// pilha de exemplares e fila de espera, eh registrado tambem todas as informacoes necessarias
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], char titulo[], int qtdExemplares);
+
+// metodo para a busca de um livro por um array de char passado por parametro que corresponde ao titulo do livro
+// retorna um ponteiro de um no do tipo livro
 Livro* buscaLivro(ListaLivro* livros, char titulo[]);
+
+//metodo para liberacao da memoria alocada, tanto das listas quanto das filas
 void liberarListaLivro(ListaLivro* livros);
+
+//metodo para impressao do estado atual da lista do livro, informando:
+//ano,titulo,autor,quantidade de exemplares presentes e a quantidade de matriculas e as respectivas matriculas
 void imprimirListaLivro(ListaLivro* livros);
+
+//metodo que converte um caracter passado por parametro em minuscula
+int toLower(char letra);
+
+//metodo para trocar um no por outro no na lista
+void troca(ListaLivro* livros, Livro* livro1,Livro* livro2,Livro* anterior);
+
+//metodo para baseado em bubbleSort para ordenacao de livros com ano igual, a partir do autor do livro
+void ordenacaoPorNome(ListaLivro* livros);
 
 
 //metodos para emprestar e devolver livros
