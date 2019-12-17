@@ -3,6 +3,8 @@
 #include <string.h>
 
 
+
+
 typedef struct matricula Matricula;
 typedef struct espera Espera;
 typedef struct exemplares Exemplares;
@@ -207,6 +209,70 @@ ListaLivro* criarListaLivro(int tamanho){
 
   return lista;
 }
+int toLower(char letra){
+  int result=0;
+  if(letra>=65 && letra < 97){
+      result=letra+32;
+      return result;
+  }else{
+    result = letra;
+    return result;
+  }
+}
+void troca(ListaLivro* livros, Livro* livro1,Livro* livro2,Livro* anterior){
+  if(livro1==livros->inicio){
+    livro1->prox=livro2->prox;
+    livro2->prox = livro1;
+    livros->inicio=livro2; 
+  }else if(livro2->prox==NULL){
+    anterior->prox=livro2;
+    livro2->prox=livro1;
+    livro1->prox=NULL;
+    livros->fim = livro1;
+  }else{
+    anterior->prox=livro2;
+    livro1->prox = livro2->prox;
+    livro2->prox = livro1;
+  }
+}
+void ordenacaoPorNome(ListaLivro* livros){
+  char letraAnalise1,letraAnalise2;
+  int letraToInt1,letraToInt2,cont,cont2=0,contLetra=0;
+  Livro* atual = livros->inicio;
+  Livro* anterior = NULL;
+
+  for(cont=0;cont<livros->tamanho;cont++){
+		for(atual=livros->inicio;atual!=NULL;){
+      contLetra=0;
+      if(atual->prox!=NULL && atual->anoPublicaco == atual->prox->anoPublicaco){
+        
+        letraToInt1=toLower(atual->autor[contLetra]);
+        letraToInt2=toLower(atual->prox->autor[contLetra]);
+        if(letraToInt1 > letraToInt2){
+          troca(livros,atual,atual->prox,anterior);
+          
+        }else if(letraToInt1 == letraToInt2){
+          contLetra++;
+            letraToInt1=toLower(atual->autor[contLetra]);
+            letraToInt2=toLower(atual->prox->autor[contLetra]);
+          while(letraToInt1==letraToInt2){
+            
+            letraToInt1=toLower(atual->autor[contLetra]);
+            letraToInt2=toLower(atual->prox->autor[contLetra]);
+            contLetra++;
+            
+          }
+          troca(livros,atual,atual->prox,anterior);
+          
+        }
+      }
+      anterior = atual;
+      atual=atual->prox;
+      cont2++;
+		}
+    cont2=0;
+	}
+}
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], char titulo[], int qtdExemplares){
   int cont,contLista=0;
   Livro* novoLivro = (Livro*) malloc(sizeof(Livro));
@@ -225,11 +291,12 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], c
     novoLivro->prox = NULL;
   }else{
     if(livros->tamanho == 1){
-      if(anoPublicaco > livros->inicio-> anoPublicaco){
+      if(anoPublicaco >= livros->inicio-> anoPublicaco){
         livros->inicio->prox = novoLivro;
         novoLivro->prox = NULL;
       }else{
         novoLivro->prox = livros->inicio;
+        livros->inicio->prox = NULL;
       }
     }else{
       while(atual!=NULL && atual->anoPublicaco <= anoPublicaco){
@@ -402,9 +469,10 @@ int main(){
     scanf("%d",&qtdExemplares);
 
     inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
-	// imprimirListaLivro(livros);
+	
   }
- 
+  //imprimirListaLivro(livros);
+  ordenacaoPorNome(livros);
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
