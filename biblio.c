@@ -232,14 +232,19 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], c
         novoLivro->prox = livros->inicio;
       }
     }else{
-      while(contLista < livros->tamanho && atual->anoPublicaco < anoPublicaco){
+      while(atual!=NULL && atual->anoPublicaco <= anoPublicaco){
         anterior = atual;
         atual = atual->prox;
         contLista++;
       }
 
-      anterior->prox = novoLivro;
-      novoLivro->prox = atual;
+      if(anterior==NULL){
+        novoLivro->prox=livros->inicio;
+        livros->inicio=novoLivro;
+      }else{
+         anterior->prox = novoLivro;
+         novoLivro->prox = atual;
+      }
     }
   }
 
@@ -359,7 +364,7 @@ void imprimirEspera(Espera* fila){
   }else{
     Matricula* atual=fila->inicio;
     printf("%d",atual->matricula);
-
+    atual=atual->prox;
     for(atual;atual!=NULL;atual=atual->prox){
         printf(",%d",atual->matricula);
     }
@@ -397,9 +402,9 @@ int main(){
     scanf("%d",&qtdExemplares);
 
     inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
-
+	// imprimirListaLivro(livros);
   }
-  //imprimirListaLivro(livros);
+ 
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
