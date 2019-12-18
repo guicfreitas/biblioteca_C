@@ -338,6 +338,7 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], c
       }else{
         novoLivro->prox = livros->inicio;
         livros->inicio->prox = NULL;
+        livros->inicio=novoLivro;
       }
     }else{
       while(atual!=NULL && atual->anoPublicaco <= anoPublicaco){
@@ -462,8 +463,12 @@ void emprestarLivro(ListaLivro* livros, int  matricula, char* titulo){
 void devolverLivro(ListaLivro* livros, char* titulo){
     Livro* result = buscaLivro(livros,titulo);
     if(result!=NULL){
-      pushExemplar(result->pilhaExemplares,((result->pilhaExemplares->vetExemplares[result->pilhaExemplares->numExemplares-1])+1));
-    }
+		if(esperaVazia(result->filaEspera)==1){ 
+      	pushExemplar(result->pilhaExemplares,((result->pilhaExemplares->vetExemplares[result->pilhaExemplares->numExemplares-1])+1));
+		}else{
+			retirarEspera(result->filaEspera);
+		}    
+	}
 }
 
 void imprimirEspera(Espera* fila){
@@ -514,7 +519,7 @@ int main(){
   }
 
   ordenacaoPorNome(livros);
-  imprimirListaLivro(livros);
+  //imprimirListaLivro(livros);
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
