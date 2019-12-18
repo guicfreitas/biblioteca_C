@@ -199,14 +199,15 @@ int esperaVazia(Espera* fila){
 void liberarEspera(Espera* fila){
   Matricula* atual = fila->inicio;
   Matricula* atualTemp;
-  while(atual->prox != NULL){
+ 
+    while(atual != NULL){
 
-    atualTemp=atual;
-    atual = atual->prox;
-    free(atualTemp);
+      atualTemp=atual;
+      atual = atual->prox;
+      free(atualTemp);
 
-  }
-
+    }
+  
   free(fila);
 }
 
@@ -489,14 +490,10 @@ void imprimirExemplares(Exemplares* pilha){
 int main(){
   int qtdLivros,cont,ano,qtdExemplares,matricula;
   char casoLivro;
-  //char* autor = (char*) malloc(100*sizeof(char));
-  //char* titulo = (char*) malloc(150*sizeof(char));
-
   char autor[100];
   char titulo[150];
   char tituloConsulta[150];
 
-  //char* tituloConsulta = (char*) malloc(150*sizeof(char));
 
   //leitura da quantidade de livros
   scanf("%d",&qtdLivros);
@@ -514,7 +511,7 @@ int main(){
   }
 
   ordenacaoPorNome(livros);
-  //imprimirListaLivro(livros);
+
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
