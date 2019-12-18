@@ -55,7 +55,7 @@ void imprimirExemplares(Exemplares* pilha);
 // metodo para alocar dinamicamente memoria para struct de uma struct de lista, retorna um ponteiro do tipo Livros
 ListaLivro* criarListaLivro(int tamanho);
 
-//metodo para a insersao ordenada de um livro, dentro de cada livro eh chamada a funcao de criacao de 
+//metodo para a insersao ordenada de um livro, dentro de cada livro eh chamada a funcao de criacao de
 // pilha de exemplares e fila de espera, eh registrado tambem todas as informacoes necessarias
 void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], char titulo[], int qtdExemplares);
 
@@ -264,7 +264,7 @@ void troca(ListaLivro* livros, Livro* livro1,Livro* livro2,Livro* anterior){
   if(livro1==livros->inicio){
     livro1->prox=livro2->prox;
     livro2->prox = livro1;
-    livros->inicio=livro2; 
+    livros->inicio=livro2;
   }else if(livro2->prox==NULL){
     anterior->prox=livro2;
     livro2->prox=livro1;
@@ -286,25 +286,25 @@ void ordenacaoPorNome(ListaLivro* livros){
 		for(atual=livros->inicio;atual!=NULL;){
       contLetra=0;
       if(atual->prox!=NULL && atual->anoPublicaco == atual->prox->anoPublicaco){
-        
+
         letraToInt1=toLower(atual->autor[contLetra]);
         letraToInt2=toLower(atual->prox->autor[contLetra]);
         if(letraToInt1 > letraToInt2){
           troca(livros,atual,atual->prox,anterior);
-          
+
         }else if(letraToInt1 == letraToInt2){
           contLetra++;
             letraToInt1=toLower(atual->autor[contLetra]);
             letraToInt2=toLower(atual->prox->autor[contLetra]);
           while(letraToInt1==letraToInt2){
-            
+
             letraToInt1=toLower(atual->autor[contLetra]);
             letraToInt2=toLower(atual->prox->autor[contLetra]);
             contLetra++;
-            
+
           }
           troca(livros,atual,atual->prox,anterior);
-          
+
         }
       }
       anterior = atual;
@@ -402,12 +402,12 @@ Livro* buscaLivro(ListaLivro* livros, char titulo[]){
     }
   }
 
-  while(cont < livros->tamanho){
+  while(atual!=NULL){
     if(strcmp(titulo,atual->titulo)==0){
       return atual;
     }
       atual= atual->prox;
-      cont++;
+
   }
   return NULL;
 
@@ -510,10 +510,11 @@ int main(){
     scanf("%d",&qtdExemplares);
 
     inserirLivro_Ordenado(livros,ano,autor,titulo,qtdExemplares);
-	
+
   }
-  //imprimirListaLivro(livros);
+
   ordenacaoPorNome(livros);
+  imprimirListaLivro(livros);
 
   while(scanf("%d",&matricula)!=EOF){
     scanf("%s",tituloConsulta);
