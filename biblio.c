@@ -2,12 +2,58 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+//possui a matricula do tipo int e um ponteiro para a proxima matricula da fila
 typedef struct matricula Matricula;
+
+//possui dois ponterios que apontam pro inicio e pro fim da fila
 typedef struct espera Espera;
+
+//possui o numero de exemplares no momento do tipo int, uma dimensao da pilha do tipo int e um array para um vetor de exemplares
 typedef struct exemplares Exemplares;
+
+//possui todas as informacoes do livro, incluindo dois ponterios para duas estruturas de dados a fila e a pilha
 typedef struct livro Livro;
+
+//possui um tamanho do tipo int e dois ponteiro um para o inicio e outra para o fim da lista de livros
 typedef struct lista ListaLivro;
+
+struct matricula{
+  int matricula;
+  Matricula* prox;
+};
+
+struct espera{
+  Matricula* inicio;
+  Matricula* fim;
+};
+
+
+struct exemplares{
+    int numExemplares;
+    int dim;
+    int* vetExemplares;
+};
+
+
+
+struct livro{
+  int anoPublicaco;
+  char autor[100];
+  char titulo[150];
+  int qtdExemplares;
+  Livro* prox;
+  Exemplares* pilhaExemplares;
+  Espera* filaEspera;
+};
+
+
+
+struct lista {
+  int tamanho;
+  Livro* inicio;
+  Livro* fim;
+
+};
 
 //metodos para fila de espera
 // metodo para alocar dinamicamente memoria para struct de fila de espera, retorna um ponteiro do tipo Espera
@@ -81,49 +127,16 @@ void ordenacaoPorNome(ListaLivro* livros);
 
 
 //metodos para emprestar e devolver livros
+//metodo para emprestar livros, se a pilha tiver populada nada acontece,
+// porem se estiver vazia coloca a matriucla do aluno na fila de espera
 void emprestarLivro(ListaLivro* livros, int  matricula, char titulo[]);
+
+//metodo para devolver um livro emprestado, se a pilha tiver vazia e tiver alguem na fila ele retira a matricula da fila,
+//se a fila estiver vazia, faz um push na pilha de livro
 void devolverLivro(ListaLivro* livros, char* titulo);
+
+
 ///////////////////////////////////////////////// IMPLEMENTACAO ///////////////////////////////////////////////
-
-
-struct matricula{
-  int matricula;
-  Matricula* prox;
-};
-struct espera{
-  Matricula* inicio;
-  Matricula* fim;
-};
-
-
-
-struct exemplares{
-    int numExemplares;
-    int dim;
-    int* vetExemplares;
-};
-
-
-
-struct livro{
-  int anoPublicaco;
-  char autor[100];
-  char titulo[150];
-  int qtdExemplares;
-  Livro* prox;
-  Exemplares* pilhaExemplares;
-  Espera* filaEspera;
-};
-
-
-
-struct lista {
-  int tamanho;
-  Livro* inicio;
-  Livro* fim;
-
-};
-
 
 
 Espera* criarEspera(){
@@ -318,9 +331,6 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], c
   int cont,contLista=0;
   Livro* novoLivro = (Livro*) malloc(sizeof(Livro));
 
-  //char* autorTemp = (char*) malloc(100*sizeof(char));
-  //char* tituloTemp = (char*) malloc(150*sizeof(char));
-
   novoLivro->anoPublicaco = anoPublicaco;
   novoLivro->qtdExemplares = qtdExemplares;
 
@@ -369,31 +379,8 @@ void inserirLivro_Ordenado(ListaLivro* livros, int anoPublicaco, char autor[], c
 
 
 }
-void inserirLivro(ListaLivro* livros, int anoPublicaco, char* autorP, char* tituloP, int qtdExemplares){
-  int cont;
-  Livro* novoLivro = (Livro*) malloc(sizeof(Livro*));
-  novoLivro->anoPublicaco = anoPublicaco;
-  novoLivro->qtdExemplares = qtdExemplares;
-  strcpy(novoLivro->autor,autorP);
-  strcpy(novoLivro->titulo,tituloP);
-  Exemplares* pilhaExemp = criarExemplares(qtdExemplares);
-  for(cont=1;cont<=qtdExemplares;cont++){
-    pushExemplar(pilhaExemp,cont);
-  }
-  novoLivro->pilhaExemplares = pilhaExemp;
-  if(livros->inicio == NULL){
-    novoLivro->prox = NULL;
-    livros->inicio=novoLivro;
-    livros->fim=novoLivro;
-  }else{
-    livros->fim->prox=novoLivro;
-    livros->fim = novoLivro;
-    novoLivro->prox = NULL;
-  }
-  livros->tamanho=livros->tamanho+1;
 
 
-}
 Livro* buscaLivro(ListaLivro* livros, char titulo[]){
   int cont=0;
   Livro* atual = livros->inicio;
@@ -413,14 +400,19 @@ Livro* buscaLivro(ListaLivro* livros, char titulo[]){
   return NULL;
 
 }
+
 void liberarListaLivro(ListaLivro* livros){
   Livro* atual = livros->inicio;
   Livro* atualTemp;
 
   while(atual->prox != NULL){
 
+    
+    liberarEspera(atual->filaEspera);
+    liberarExemplares(atual->pilhaExemplares);
     atualTemp=atual;
     atual = atual->prox;
+    
     free(atualTemp);
 
   }
@@ -491,6 +483,9 @@ void imprimirExemplares(Exemplares* pilha){
     printf("%d\n",pilha->vetExemplares[pilha->numExemplares-1]);
   }
 }
+
+
+//////////////////////////////////////////// MAIN /////////////////////////////////////////////////////
 int main(){
   int qtdLivros,cont,ano,qtdExemplares,matricula;
   char casoLivro;
@@ -536,5 +531,6 @@ int main(){
   }
 
   imprimirListaLivro(livros);
+  liberarListaLivro(livros);
   return 0;
 }
